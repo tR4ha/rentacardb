@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <title>Reservation Test</title>
+</head>
+<body>
+<h2>Reservation POST Test</h2>
+
+<label>listingId: <input id="listingId" type="number" value="1"></label><br><br>
+<label>renterUserId: <input id="renterUserId" type="number" value="1"></label><br><br>
+<label>start: <input id="start" type="datetime-local" value="2025-06-01T10:00"></label><br><br>
+<label>end: <input id="end" type="datetime-local" value="2025-06-03T10:00"></label><br><br>
+<label>pickupBranchId: <input id="pickupBranchId" type="number" value="1"></label><br><br>
+<label>dropoffBranchId: <input id="dropoffBranchId" type="number" value="1"></label><br><br>
+<label>assignedVehicleId (opsiyonel): <input id="assignedVehicleId" type="number" value=""></label><br><br>
+
+<button id="btn">Create Reservation</button>
+
+<pre id="out" style="background:#111;color:#0f0;padding:12px;"></pre>
+
+<script>
+    document.getElementById("btn").addEventListener("click", async () => {
+        const body = {
+            listingId: Number(document.getElementById("listingId").value),
+            renterUserId: Number(document.getElementById("renterUserId").value),
+            start: document.getElementById("start").value,
+            end: document.getElementById("end").value,
+            pickupBranchId: Number(document.getElementById("pickupBranchId").value),
+            dropoffBranchId: Number(document.getElementById("dropoffBranchId").value),
+        };
+
+        const av = document.getElementById("assignedVehicleId").value;
+        if (av !== "") body.assignedVehicleId = Number(av);
+
+        const res = await fetch("/api/reservations", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(body)
+        });
+
+        const text = await res.text();
+        document.getElementById("out").textContent =
+            "HTTP " + res.status + "\n\n" + text;
+    });
+</script>
+</body>
+</html>
